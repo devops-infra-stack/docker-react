@@ -1,5 +1,5 @@
 # Purpose  - to be used for production
-FROM node:22-alpine as builder
+FROM node:22-alpine AS builder
 
 WORKDIR '/app'
 

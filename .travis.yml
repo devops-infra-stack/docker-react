@@ -1,4 +1,4 @@
-sude: required
+sudo: required
 services: 
   - docker
 
@@ -6,4 +6,4 @@ before_install:
   - docker build -t subash/docker-react -f Dockerfile.dev .
 
 script: # list of command that need to run our test suits
-  -docker run -e CI=true subash/docker-react npm run test
+  - docker run -e CI=true subash/docker-react npm run test
