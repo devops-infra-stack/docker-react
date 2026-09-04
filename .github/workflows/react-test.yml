@@ -34,8 +34,8 @@ jobs:
       - name: Build production docker image
         run: docker build -t subash/docker-react -f Dockerfile .
 
-      - name: Generate deployment package
-        run: zip -r deploy.zip . -x "*.git*" "node_modules/*"
+      - name: Generate deployment package 
+        run: zip -r deploy.zip . -x "*.git*" "node_modules/*" ".env*"
 
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
