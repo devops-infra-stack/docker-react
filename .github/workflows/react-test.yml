@@ -20,3 +20,38 @@ jobs:
 
       - name: Run test
         run: docker run -e CI=true subash/docker-react npm run test
+
+  deploy:
+    name: Deploy to AWS Elastic Beanstalk
+    runs-on: ubuntu-latest
+    needs: test #only run if test job passes
+    if: github.ref == 'refs/heads/main' #only on push to main(not PR)
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build production docker image
+        run: docker build -t subash/docker-react -f Dockerfile .
+
+      - name: Generate deployment package
+        run: zip -r deploy.zip . -x "*.git*" "node_modules/*"
+
+      - name: Deploy to Elastic Beanstalk
+        uses: einaregilsson/beanstalk-deploy@v22
+        with:
+          application_name: frontend
+          environment_name: frontend-env
+          region: us-east-2
+          version_label: ${{ github.sha }}
+          deployment_package: deploy.zip
+          s3_bucket: elasticbeanstalk-us-east-2-137661745753
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+
+
+
+
+
+
